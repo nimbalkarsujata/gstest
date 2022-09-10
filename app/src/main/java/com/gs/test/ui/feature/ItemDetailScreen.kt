@@ -40,18 +40,23 @@ fun ItemDetailScreen(livedata: LiveData<UiState<Item>>, itemViewModel: ItemsData
             Loading()
         }
         is UiState.Error -> {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                Text(text = "No data available")
-            }
+            EmptyDataScreen()
         }
         is UiState.Success -> {
             (uiState as UiState.Success<Item>).data?.let {
                 DetailScreen(it, itemViewModel, favoriteItemsList)
-            }
+            }?:EmptyDataScreen()
         }
+    }
+}
+
+@Composable
+private fun EmptyDataScreen() {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Text(text = "No data available")
     }
 }
 
@@ -93,7 +98,7 @@ fun DetailScreen(item: Item, itemViewModel: ItemsDataViewModel?, favoriteItemsLi
                 style = MaterialTheme.typography.subtitle2
             )
             Icon(
-                imageVector = if (favoriteItemsList.contains(item) == true)
+                imageVector = if (favoriteItemsList.contains(item))
                     Icons.Filled.Favorite
                 else
                     Icons.Default.FavoriteBorder,

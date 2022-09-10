@@ -27,7 +27,7 @@ class MockDataRepository : DataRepository{
         )
     )
 
-    val singleItem = Item(
+    private val singleItem = Item(
         overview = "Overview",
         date = "2022/09/09",
         url = "",
@@ -53,5 +53,9 @@ class MockDataRepository : DataRepository{
 
     override suspend fun getFavouriteItems(): List<Item> {
         return items
+    }
+
+    override suspend fun getFavouriteItemByDate(date: String): Item? {
+        return singleItem
     }
 }

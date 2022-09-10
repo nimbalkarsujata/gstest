@@ -9,9 +9,6 @@ interface ItemsDao {
     @Query("Select * from item ORDER BY date(date) DESC")
     suspend fun getAll(): List<Item>
 
-    @Query("Select * from item where date = :date")
-    suspend fun getItemByDate(date: String): Item
-
     @Query("Delete from item")
     suspend fun deleteAll()
 

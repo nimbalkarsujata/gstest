@@ -11,34 +11,40 @@ import javax.inject.Inject
 
 class ItemDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    repository: DataRepository
+    private val repository: DataRepository
 ) : ViewModel() {
-    private val repository = repository
     private val itemLiveData = MutableLiveData<UiState<Item>>(UiState.Loading)
     fun getItemsLiveData(): LiveData<UiState<Item>> = itemLiveData
 
     init {
         val itemDate: String = savedStateHandle.get<String>("date") ?: ""
+        val isFavorite: Boolean = savedStateHandle.get<Boolean>("favorites") ?: false
         viewModelScope.launch(Dispatchers.IO) {
-            getItemByDate(itemDate)
+            if (!isFavorite) {
+                getItemByDate(itemDate)
+            } else {
+                fetchDetailsFromFavorites(itemDate)
+            }
         }
     }
 
-    suspend fun getItemByDate(date: String) {
+    private suspend fun getItemByDate(date: String) {
         try {
-            repository.getDataByDate(date = date).let {
+            repository.getDataByDate(date = date)?.let {
                 itemLiveData.postValue(UiState.Success(data = it))
-            }
+            } ?: itemLiveData.postValue(UiState.Error())
         } catch (e: Exception) {
             itemLiveData.postValue(UiState.Error())
         }
     }
 
-    fun fetchBasedOnDateSelection(date: String) {
-        Log.d("Sujata", "Selected date : $date")
-        viewModelScope.launch(Dispatchers.IO) {
-            itemLiveData.postValue(UiState.Loading)
-            getItemByDate(date)
+    private suspend fun fetchDetailsFromFavorites(date: String) {
+        try {
+            repository.getFavouriteItemByDate(date = date)?.let {
+                itemLiveData.postValue(UiState.Success(data = it))
+            } ?: itemLiveData.postValue(UiState.Error())
+        } catch (e: Exception) {
+            itemLiveData.postValue(UiState.Error())
         }
     }
 }

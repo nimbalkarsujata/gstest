@@ -6,8 +6,8 @@ import com.gs.test.data.model.LikedItem
 interface LocalDataSource : BaseDataSource<Item> {
     override suspend fun getAllData(): List<Item>
     override suspend fun getAllLikedData(): List<LikedItem>
-    override suspend fun getItemByDate(date: String): Item
     suspend fun updateItemData(date: LikedItem)
+    suspend fun getFavoriteItemByDate(date: String):LikedItem
     override suspend fun saveAllData(data: List<Item>)
     override suspend fun saveItemData(data: Item)
     override suspend fun clearAllData()

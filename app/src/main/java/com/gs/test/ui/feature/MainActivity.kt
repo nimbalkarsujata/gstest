@@ -1,7 +1,9 @@
 package com.gs.test.ui.feature
 
+import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
+import android.widget.DatePicker
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
@@ -24,12 +26,11 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.gs.test.R
 import com.gs.test.di.Injector
-import com.gs.test.ui.feature.utils.getDate
-import com.gs.test.ui.feature.utils.showPicker
 import com.gs.test.ui.theme.ComposeSampleTheme
 import com.gs.test.viewmodel.DataViewModelFactory
 import com.gs.test.viewmodel.ItemDetailViewModel
 import com.gs.test.viewmodel.ItemsDataViewModel
+import java.util.*
 import javax.inject.Inject
 
 
@@ -89,9 +90,18 @@ fun TopBarView(
                 )
             }
 
-
             IconButton(onClick = {
-              //  showPicker(context = context, itemsDetailsViewModel)
+                val c = Calendar.getInstance()
+                val year = c.get(Calendar.YEAR)
+                val month = c.get(Calendar.MONTH)
+                val day = c.get(Calendar.DAY_OF_MONTH)
+                val datePickerDialog = DatePickerDialog(
+                    context, { _: DatePicker, day: Int, month: Int, year: Int ->
+                        val date = "$day-${month + 1}-$year"
+                        navController.navigate("${Router.DateSelectedScreen.route}/${date}")
+                    }, year, month, day
+                )
+                datePickerDialog.show()
             }) {
                 Icon(
                     imageVector = Icons.Default.DateRange,
@@ -99,6 +109,25 @@ fun TopBarView(
                 )
             }
         }
+    )
+}
+
+@Composable
+private fun navigateToDetails(
+    date: String,
+    favorite: Boolean,
+    itemViewModel: ItemsDataViewModel,
+    viewModelFactory: DataViewModelFactory,
+) {
+    val detailsViewModel: ItemDetailViewModel =
+        viewModel(factory = viewModelFactory.apply {
+            map["date"] = date
+            map["favorites"] = favorite
+        })
+    ItemDetailScreen(
+        livedata = detailsViewModel.getItemsLiveData(),
+        itemViewModel = itemViewModel,
+        itemViewModel.getFavItemsLiveData()
     )
 }
 
@@ -111,11 +140,12 @@ fun NasaApp(
 
     NavHost(navController = navController, startDestination = Router.MainScreen.route) {
         composable(route = Router.MainScreen.route) {
-            val detailsViewModel: ItemDetailViewModel =
-                viewModel(factory = viewModelFactory.apply {
-                    map["date"] = getDate(true)
-                })
-            ItemDetailScreen(livedata = detailsViewModel.getItemsLiveData(), itemViewModel = itemViewModel, itemViewModel.getFavItemsLiveData())
+            navigateToDetails(
+                "",
+                false,
+                itemViewModel = itemViewModel,
+                viewModelFactory = viewModelFactory
+            )
         }
         composable(
             route = "${Router.DetailScreen.route}/{date}",
@@ -124,11 +154,27 @@ fun NasaApp(
             })
         ) {
             val date: String = it.arguments?.getString("date", "") ?: ""
-            val detailsViewModel: ItemDetailViewModel =
-                viewModel(factory = viewModelFactory.apply {
-                    map["date"] = date
-                })
-            ItemDetailScreen(livedata = detailsViewModel.getItemsLiveData(), itemViewModel, itemViewModel.getFavItemsLiveData())
+            navigateToDetails(
+                date = date,
+                true,
+                itemViewModel = itemViewModel,
+                viewModelFactory = viewModelFactory
+            )
+        }
+
+        composable(
+            route = "${Router.DateSelectedScreen.route}/{date}",
+            arguments = listOf(navArgument("date") {
+                type = NavType.StringType
+            })
+        ) {
+            val date: String = it.arguments?.getString("date", "") ?: ""
+            navigateToDetails(
+                date = date,
+                favorite = false,
+                itemViewModel = itemViewModel,
+                viewModelFactory = viewModelFactory
+            )
         }
 
         composable(route = Router.FavListScreen.route) {

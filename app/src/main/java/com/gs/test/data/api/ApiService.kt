@@ -12,4 +12,9 @@ interface ApiService {
         @Query("start_date") startDate: String,
         @Query("end_date") endDate: String
     ): Response<List<Item>>
+
+    @GET(APIEndPoint.GET_APOD_ENDPOINT)
+    suspend fun getItem(
+        @Query("api_key") apiKey: String
+    ): Response<Item>
 }

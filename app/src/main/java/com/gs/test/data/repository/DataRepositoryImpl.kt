@@ -39,10 +39,14 @@ class DataRepositoryImpl(
      */
     override suspend fun getDataByDate(date: String): Item? {
         remoteDataSource.getItemOnDate(date = date)?.let {
+            localDataSource.clearAllData()
             localDataSource.saveItemData(it)
             return it
         }
-        return localDataSource.getItemByDate(date)
+        return if (!localDataSource.getAllData().isNullOrEmpty()) {
+            localDataSource.getAllData()[0]
+        } else
+            null
     }
 
     /**
@@ -64,6 +68,10 @@ class DataRepositoryImpl(
      */
     override suspend fun getFavouriteItems(): List<Item> {
         return localDataSource.getAllLikedData().map { it.toItem() }
+    }
+
+    override suspend fun getFavouriteItemByDate(date: String): Item {
+       return localDataSource.getFavoriteItemByDate(date).toItem()
     }
 
     private suspend fun getAllDataForDisplay(): Items {

@@ -9,6 +9,9 @@ interface LikedItemsDao {
     @Query("Select * from liked_items ORDER BY date(date) DESC")
     suspend fun getAll(): List<LikedItem>
 
+    @Query("Select * from liked_items where date = :date")
+    suspend fun getItemByDate(date: String): LikedItem
+
 
     @Query("Delete from liked_items")
     suspend fun deleteAll()

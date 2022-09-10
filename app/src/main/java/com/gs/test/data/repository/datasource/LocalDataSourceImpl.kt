@@ -14,12 +14,12 @@ class LocalDataSourceImpl(private val dataDao: ItemsDao, private val likedItemsD
         return likedItemsDao.getAll()
     }
 
-    override suspend fun getItemByDate(date: String): Item {
-        return dataDao.getItemByDate(date)
-    }
-
     override suspend fun updateItemData(data: LikedItem) {
         likedItemsDao.updateRecord(data)
+    }
+
+    override suspend fun getFavoriteItemByDate(date: String): LikedItem {
+       return likedItemsDao.getItemByDate(date)
     }
 
     override suspend fun saveAllData(data: List<Item>) {

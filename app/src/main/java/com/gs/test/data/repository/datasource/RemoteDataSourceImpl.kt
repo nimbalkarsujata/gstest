@@ -17,11 +17,26 @@ class RemoteDataSourceImpl(private val apiService: ApiService, private val apiKe
     }
 
     override suspend fun getItemOnDate(date: String): Item? {
-        val data = apiService.getItemByDate(apiKey = apiKey, startDate = date, endDate = date)
+        if (date.isEmpty()) {
+            return getItem()
+        }
+        val data = apiService.getItemByDate(
+            apiKey = apiKey,
+            startDate = date,
+            endDate = date
+        )
         data.body()?.let {
             if (it.isNotEmpty()) {
                 return it[0]
             } else return null
+        }
+        return null
+    }
+
+    private suspend fun getItem(): Item? {
+        val data = apiService.getItem(apiKey = apiKey)
+        data.body()?.let {
+            return it
         }
         return null
     }

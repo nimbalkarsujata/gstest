@@ -69,8 +69,4 @@ class ItemsDataViewModel @Inject constructor(val repository: DataRepository) : V
         }
     }
 
-    private suspend fun fetchItemsData(): Items {
-        return repository.getData()
-    }
-
 }

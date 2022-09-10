@@ -10,4 +10,5 @@ interface DataRepository {
     suspend fun getDataByDate(date: String): Item?
     suspend fun updateItem(data: Item, isExist: Boolean): Items
     suspend fun getFavouriteItems(): List<Item>
+    suspend fun getFavouriteItemByDate(date: String): Item?
 }

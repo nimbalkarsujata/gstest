@@ -17,8 +17,7 @@ class ItemDetails {
     private val itemLiveData = MutableLiveData<UiState<Item>>(UiState.Loading)
     private fun getItemsLiveData(): LiveData<UiState<Item>> = itemLiveData
 
-    val itemFavLiveData = MutableLiveData<List<Item>>()
-    fun getFavItemsLiveData(): LiveData<List<Item>> = itemFavLiveData
+    private val itemFavLiveData = MutableLiveData<List<Item>>()
     private val item: Item = Item(
         overview = "Overview2",
         date = "2022/09/12",
