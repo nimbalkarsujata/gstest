@@ -10,7 +10,13 @@ import dagger.Provides
 @Module
 class RepositoryModule {
     @Provides
-    fun provideDataRepository(localDataSource: LocalDataSource, remoteDataSource: RemoteDataSource):DataRepository {
-        return DataRepositoryImpl(localDataSource = localDataSource, remoteDataSource = remoteDataSource)
+    fun provideDataRepository(
+        localDataSource: LocalDataSource,
+        remoteDataSource: RemoteDataSource
+    ): DataRepository {
+        return DataRepositoryImpl(
+            localDataSource = localDataSource,
+            remoteDataSource = remoteDataSource
+        )
     }
 }

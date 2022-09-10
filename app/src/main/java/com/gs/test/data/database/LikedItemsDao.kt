@@ -1,7 +1,6 @@
 package com.gs.test.data.database
 
 import androidx.room.*
-import com.gs.test.data.model.Item
 import com.gs.test.data.model.LikedItem
 
 @Dao

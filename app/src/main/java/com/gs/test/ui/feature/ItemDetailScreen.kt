@@ -65,7 +65,10 @@ fun DetailScreen(item: Item) {
             .fillMaxHeight()
             .verticalScroll(rememberScrollState())
             .padding(appDimension(id = R.dimen.dimen_10))
-            .shadow(appDimension(id = R.dimen.dimen_2), RoundedCornerShape(appDimension(id = R.dimen.dimen_8)))
+            .shadow(
+                appDimension(id = R.dimen.dimen_2),
+                RoundedCornerShape(appDimension(id = R.dimen.dimen_8))
+            )
     ) {
         Text(
             text = item.date,
@@ -77,7 +80,7 @@ fun DetailScreen(item: Item) {
         Spacer(modifier = Modifier.height(appDimension(id = R.dimen.dimen_10)))
 
         AsyncImage(
-            model = item?.url,
+            model = item.url,
             contentDescription = "",
             modifier = Modifier
                 .size(appDimension(id = R.dimen.dimen_200))
@@ -88,7 +91,7 @@ fun DetailScreen(item: Item) {
         Spacer(modifier = Modifier.height(appDimension(id = R.dimen.dimen_10)))
 
         Text(
-            text = item?.title?:"",
+            text = item.title,
             modifier = Modifier
                 .padding(appDimension(id = R.dimen.dimen_20))
                 .align(Alignment.CenterHorizontally),
@@ -96,13 +99,12 @@ fun DetailScreen(item: Item) {
         )
 
         Text(
-            text = item?.overview?:"",
+            text = item.overview,
             modifier = Modifier
                 .padding(appDimension(id = R.dimen.dimen_20))
                 .align(Alignment.CenterHorizontally),
             style = MaterialTheme.typography.subtitle1
         )
-
     }
 }
 
@@ -110,6 +112,6 @@ fun DetailScreen(item: Item) {
 @Composable
 fun TestPreview() {
     //Item(1, "Test data for item detail", "/test", "Test item")
-   // ItemDetailScreen(items = Item)
+    // ItemDetailScreen(items = Item)
 }
 

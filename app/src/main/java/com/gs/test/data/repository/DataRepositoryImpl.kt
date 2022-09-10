@@ -15,7 +15,8 @@ class DataRepositoryImpl(
     }
 
     override suspend fun getFromRemoteData(startDate: String): Items {
-        val items = remoteDataSource.getAllData(startDate = startDate, endDate = getDate(latest = true))
+        val items =
+            remoteDataSource.getAllData(startDate = startDate, endDate = getDate(latest = true))
         items.let {
             if (items.results.isNullOrEmpty().not()) {
                 localDataSource.clearAllData()
@@ -25,7 +26,7 @@ class DataRepositoryImpl(
         return getAllDataForDisplay()
     }
 
-    override suspend fun getDataByDate(date: String): Item? {
+    override suspend fun getDataByDate(date: String): Item {
         return localDataSource.getItemByDate(date = date)
     }
 

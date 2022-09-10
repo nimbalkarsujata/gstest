@@ -18,11 +18,13 @@ class RemoteModule {
     companion object {
         private const val timeOut: Long = 15
     }
+
     @Provides
     @Singleton
     fun networkInterceptor(): NetworkInterceptor {
         return NetworkInterceptor()
     }
+
     @Singleton
     @Provides
     fun providesRetrofitInstance(okhttpClient: OkHttpClient): Retrofit {
@@ -34,21 +36,21 @@ class RemoteModule {
 
     @Singleton
     @Provides
-    fun providesOkkHttpClientInstance(networkInterceptor: NetworkInterceptor,): OkHttpClient {
+    fun providesOkkHttpClientInstance(networkInterceptor: NetworkInterceptor): OkHttpClient {
         val interceptor = HttpLoggingInterceptor().apply {
             this.level = HttpLoggingInterceptor.Level.BODY
         }
-        val certificatePin= CertificatePinner.Builder()
-             .add(
-                 "*.nasa.org",
-                 "sha256/+vqZVAzTqUP8BGkfl88yU7SQ3C8J2uNEa55B7RZjEg0="
-             ).build()
+        val certificatePin = CertificatePinner.Builder()
+            .add(
+                "*.nasa.org",
+                "sha256/+vqZVAzTqUP8BGkfl88yU7SQ3C8J2uNEa55B7RZjEg0="
+            ).build()
 
         return OkHttpClient.Builder().apply {
             addInterceptor(interceptor)
             addInterceptor(networkInterceptor)
             connectTimeout(timeOut, TimeUnit.SECONDS)
-          //  certificatePinner(certificatePin)
+            //  certificatePinner(certificatePin)
         }.build()
     }
 

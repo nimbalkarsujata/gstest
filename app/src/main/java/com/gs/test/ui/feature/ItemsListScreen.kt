@@ -61,7 +61,11 @@ fun ItemsListScreen(
             }
             is UiState.Success -> {
                 (uiState as UiState.Success<Items>).data?.let {
-                    ListData(itemViewModel = itemViewModel, itemList = it.results, navCallBack = navCallBack)
+                    ListData(
+                        itemViewModel = itemViewModel,
+                        itemList = it.results,
+                        navCallBack = navCallBack
+                    )
                 }
             }
         }
@@ -69,8 +73,12 @@ fun ItemsListScreen(
 }
 
 @Composable
-fun ListData(itemViewModel: ItemsDataViewModel, itemList:LiveData<List<Item>>, navCallBack: (Item) -> Unit) {
-    val list by itemList.observeAsState(itemList.value?:ArrayList())
+fun ListData(
+    itemViewModel: ItemsDataViewModel,
+    itemList: LiveData<List<Item>>,
+    navCallBack: (Item) -> Unit
+) {
+    val list by itemList.observeAsState(itemList.value ?: ArrayList())
     ListData(itemViewModel, list, navCallBack)
 }
 
@@ -87,7 +95,7 @@ fun ListData(itemViewModel: ItemsDataViewModel, itemList: List<Item>, navCallBac
             }
             item {
                 LaunchedEffect(true) {
-                    Log.d("Sujata","Sujata at end ---->")
+                    Log.d("Sujata", "Sujata at end ---->")
                 }
             }
         }
@@ -126,7 +134,7 @@ fun DataItem(item: Item, navCallBack: (Item) -> Unit, itemViewModel: ItemsDataVi
                 .animateContentSize()
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = CenterVertically
         ) {
             AsyncImage(
                 model = item.url,

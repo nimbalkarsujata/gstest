@@ -26,8 +26,8 @@ class NetworkInterceptor : Interceptor {
                 )
             }
         }
-        return response!!.newBuilder()
-            .body(responseString!!.toResponseBody(response.body!!.contentType()))
+        return response.newBuilder()
+            .body(responseString.toResponseBody(response.body!!.contentType()))
             .build()
     }
     private fun buildErrorResponse(chain: Interceptor.Chain, error: InterceptErrorCode): Response {

@@ -1,6 +1,6 @@
 package com.gs.test.data.model
 
-data class Items (
+data class Items(
     val results: List<Item>
 )
 

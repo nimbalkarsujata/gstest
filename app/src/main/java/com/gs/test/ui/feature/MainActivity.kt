@@ -58,7 +58,11 @@ class MainActivity : AppCompatActivity() {
                             itemsDataViewModel = itemsDataViewModel,
                             navController
                         )
-                        NasaApp(itemsDataViewModel, viewModelFactory = viewModelFactory, navController)
+                        NasaApp(
+                            itemsDataViewModel,
+                            viewModelFactory = viewModelFactory,
+                            navController
+                        )
                     }
 
                 }
@@ -68,13 +72,17 @@ class MainActivity : AppCompatActivity() {
 }
 
 @Composable
-fun TopBarView(context: Context, itemsDataViewModel: ItemsDataViewModel, navController: NavHostController) {
+fun TopBarView(
+    context: Context,
+    itemsDataViewModel: ItemsDataViewModel,
+    navController: NavHostController
+) {
     TopAppBar(
         title = { Text(stringResource(R.string.gs_top_bar_title, "Welcome")) },
         backgroundColor = colorResource(id = R.color.teal_200),
         actions = {
             IconButton(onClick = {
-                navController.navigate("${Router.FavListScreen.route}")
+                navController.navigate(Router.FavListScreen.route)
             }) {
                 Icon(
                     imageVector = Icons.Default.FavoriteBorder,
@@ -96,7 +104,11 @@ fun TopBarView(context: Context, itemsDataViewModel: ItemsDataViewModel, navCont
 }
 
 @Composable
-fun NasaApp(itemViewModel: ItemsDataViewModel, viewModelFactory: DataViewModelFactory, navController: NavHostController) {
+fun NasaApp(
+    itemViewModel: ItemsDataViewModel,
+    viewModelFactory: DataViewModelFactory,
+    navController: NavHostController
+) {
 
     NavHost(navController = navController, startDestination = Router.ListScreen.route) {
         composable(route = Router.ListScreen.route) {
