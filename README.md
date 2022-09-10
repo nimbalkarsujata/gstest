@@ -1,14 +1,17 @@
 # gstest
 **Project details:** 
+
 NASa Image Of day
 
 **Technology Used:**
+
 Kotlin
 Jetpack 
  - Room db
  - Compose
  
  **Architecture**
+ 
  MVVM + Clean
  - data
    - api - Api related classes
@@ -20,13 +23,20 @@ Jetpack
  - viewmodel - View models
  
  **Project Set up steps- **
+ 
  - git clone https://github.com/nimbalkarsujata/gstest.git
  - Open project in Android Studio - Trust Project
  - Install the application
  
  **Test cases covered:**
+ 
  - Ui 
  - Unit
+ 
+**Supported :**
+
+- Dark mode support
+- App should handle different screen sizes, orientations
  
 ** Application Walkthrough - **
  Home Screen - Here Provison to add in favourites on click of Favourite  icon in Item details: 
