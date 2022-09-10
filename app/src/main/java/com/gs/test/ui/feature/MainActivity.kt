@@ -24,6 +24,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.gs.test.R
 import com.gs.test.di.Injector
+import com.gs.test.ui.feature.utils.getDate
 import com.gs.test.ui.feature.utils.showPicker
 import com.gs.test.ui.theme.ComposeSampleTheme
 import com.gs.test.viewmodel.DataViewModelFactory
@@ -55,7 +56,6 @@ class MainActivity : AppCompatActivity() {
                     Column {
                         TopBarView(
                             context = this@MainActivity,
-                            itemsDataViewModel = itemsDataViewModel,
                             navController
                         )
                         NasaApp(
@@ -74,7 +74,6 @@ class MainActivity : AppCompatActivity() {
 @Composable
 fun TopBarView(
     context: Context,
-    itemsDataViewModel: ItemsDataViewModel,
     navController: NavHostController
 ) {
     TopAppBar(
@@ -92,7 +91,7 @@ fun TopBarView(
 
 
             IconButton(onClick = {
-                showPicker(context = context, itemsDataViewModel)
+              //  showPicker(context = context, itemsDetailsViewModel)
             }) {
                 Icon(
                     imageVector = Icons.Default.DateRange,
@@ -110,11 +109,13 @@ fun NasaApp(
     navController: NavHostController
 ) {
 
-    NavHost(navController = navController, startDestination = Router.ListScreen.route) {
-        composable(route = Router.ListScreen.route) {
-            ItemsListScreen(itemViewModel, livedata = itemViewModel.getItemsLiveData()) {
-                navController.navigate("${Router.DetailScreen.route}/${it.date}")
-            }
+    NavHost(navController = navController, startDestination = Router.MainScreen.route) {
+        composable(route = Router.MainScreen.route) {
+            val detailsViewModel: ItemDetailViewModel =
+                viewModel(factory = viewModelFactory.apply {
+                    map["date"] = getDate(true)
+                })
+            ItemDetailScreen(livedata = detailsViewModel.getItemsLiveData(), itemViewModel = itemViewModel, itemViewModel.getFavItemsLiveData())
         }
         composable(
             route = "${Router.DetailScreen.route}/{date}",
@@ -127,7 +128,7 @@ fun NasaApp(
                 viewModel(factory = viewModelFactory.apply {
                     map["date"] = date
                 })
-            ItemDetailScreen(livedata = detailsViewModel.getItemsLiveData())
+            ItemDetailScreen(livedata = detailsViewModel.getItemsLiveData(), itemViewModel, itemViewModel.getFavItemsLiveData())
         }
 
         composable(route = Router.FavListScreen.route) {

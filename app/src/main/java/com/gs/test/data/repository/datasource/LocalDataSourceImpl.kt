@@ -26,6 +26,10 @@ class LocalDataSourceImpl(private val dataDao: ItemsDao, private val likedItemsD
         dataDao.insertAllRecords(data)
     }
 
+    override suspend fun saveItemData(data: Item) {
+        dataDao.insertRecord(data)
+    }
+
     override suspend fun clearAllData() {
         dataDao.deleteAll()
     }

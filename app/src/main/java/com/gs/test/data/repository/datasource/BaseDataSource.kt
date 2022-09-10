@@ -10,4 +10,5 @@ interface BaseDataSource<T> {
     suspend fun clearAllData()
     suspend fun deleteData(item: LikedItem)
     suspend fun getItemByDate(date: String): Item
+    suspend fun saveItemData(data: Item)
 }

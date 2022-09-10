@@ -7,7 +7,7 @@ import retrofit2.http.Query
 
 interface ApiService {
     @GET(APIEndPoint.GET_APOD_ENDPOINT)
-    suspend fun getAllItems(
+    suspend fun getItemByDate(
         @Query("api_key") apiKey: String,
         @Query("start_date") startDate: String,
         @Query("end_date") endDate: String

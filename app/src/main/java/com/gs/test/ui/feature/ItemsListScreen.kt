@@ -61,7 +61,7 @@ fun ItemsListScreen(
             }
             is UiState.Success -> {
                 (uiState as UiState.Success<Items>).data?.let {
-                    ListData(
+                    SwipeView(
                         itemViewModel = itemViewModel,
                         itemList = it.results,
                         navCallBack = navCallBack
@@ -79,29 +79,33 @@ fun ListData(
     navCallBack: (Item) -> Unit
 ) {
     val list by itemList.observeAsState(itemList.value ?: ArrayList())
-    ListData(itemViewModel, list, navCallBack)
+    SwipeView(itemViewModel, list, navCallBack)
 }
 
 @Composable
-fun ListData(itemViewModel: ItemsDataViewModel, itemList: List<Item>, navCallBack: (Item) -> Unit) {
+fun SwipeView(itemViewModel: ItemsDataViewModel, itemList: List<Item>, navCallBack: (Item) -> Unit) {
     val isRefreshing by itemViewModel.isRefreshing.collectAsState()
     SwipeRefresh(
         state = rememberSwipeRefreshState(isRefreshing),
         onRefresh = { itemViewModel.refreshData() },
     ) {
-        LazyColumn(contentPadding = PaddingValues(appDimension(id = R.dimen.dimen_16))) {
-            items(itemList) { item ->
-                DataItem(item = item, navCallBack, itemViewModel)
-            }
-            item {
-                LaunchedEffect(true) {
-                    Log.d("Sujata", "Sujata at end ---->")
-                }
+        ListView(itemList, itemViewModel, navCallBack)
+    }
+}
+
+@Composable
+fun ListView(itemList: List<Item>, itemViewModel: ItemsDataViewModel?,  navCallBack: (Item) -> Unit) {
+    LazyColumn(contentPadding = PaddingValues(appDimension(id = R.dimen.dimen_16))) {
+        items(itemList) { item ->
+            DataItem(item = item, navCallBack, itemViewModel)
+        }
+        item {
+            LaunchedEffect(true) {
+                Log.d("Sujata", "Sujata at end ---->")
             }
         }
     }
 }
-
 
 @Composable
 private fun Loading() {
@@ -114,7 +118,7 @@ private fun Loading() {
 }
 
 @Composable
-fun DataItem(item: Item, navCallBack: (Item) -> Unit, itemViewModel: ItemsDataViewModel) {
+fun DataItem(item: Item, navCallBack: (Item) -> Unit, itemViewModel: ItemsDataViewModel?) {
     val imageSize: Dp by animateDpAsState(targetValue = appDimension(id = R.dimen.dimen_80))
     Card(
         shape = RoundedCornerShape(appDimension(id = R.dimen.dimen_8)),
@@ -168,8 +172,9 @@ fun DataItem(item: Item, navCallBack: (Item) -> Unit, itemViewModel: ItemsDataVi
                     maxLines = 1,
                 )
             }
+
             Icon(
-                imageVector = if (itemViewModel.itemFavLiveData.value?.contains(item) == true)
+                imageVector = if (itemViewModel?.itemFavLiveData?.value?.contains(item) == true)
                     Icons.Filled.Favorite
                 else
                     Icons.Default.FavoriteBorder,
@@ -180,7 +185,7 @@ fun DataItem(item: Item, navCallBack: (Item) -> Unit, itemViewModel: ItemsDataVi
                     .weight(1f)
                     .padding(appDimension(id = R.dimen.dimen_8))
                     .clickable {
-                        itemViewModel.updateValue(item)
+                        itemViewModel?.updateValue(item)
                     }
             )
         }

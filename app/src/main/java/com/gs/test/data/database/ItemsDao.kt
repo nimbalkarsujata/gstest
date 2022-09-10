@@ -19,6 +19,9 @@ interface ItemsDao {
     suspend fun insertRecords(t: List<Item>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertRecord(t: Item)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllRecords(t: List<Item>)
 
     @Delete

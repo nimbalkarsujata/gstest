@@ -31,12 +31,10 @@ class ItemsDataViewModel @Inject constructor(val repository: DataRepository) : V
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            postData(fetchItemsData())
             val likedItem = repository.getFavouriteItems()
             itemFavLiveData.postValue(likedItem)
         }
     }
-
     fun refreshData() {
         fetchBasedOnDateSelection(getDate(latest = false))
     }

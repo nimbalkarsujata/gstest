@@ -7,7 +7,7 @@ import androidx.annotation.DimenRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.res.dimensionResource
-import com.gs.test.viewmodel.ItemsDataViewModel
+import com.gs.test.viewmodel.ItemDetailViewModel
 import java.util.*
 
 fun getDate(latest: Boolean): String {
@@ -25,7 +25,7 @@ fun getDate(latest: Boolean): String {
 fun appDimension(@DimenRes id: Int) = dimensionResource(id = id)
 
 
-fun showPicker(context: Context, itemViewModel: ItemsDataViewModel) {
+fun showPicker(context: Context, itemViewModel: ItemDetailViewModel) {
     val c = Calendar.getInstance()
     val year = c.get(Calendar.YEAR)
     val month = c.get(Calendar.MONTH)

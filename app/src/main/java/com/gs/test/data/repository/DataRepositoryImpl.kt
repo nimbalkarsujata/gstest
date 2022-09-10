@@ -10,10 +10,17 @@ class DataRepositoryImpl(
     private val remoteDataSource: RemoteDataSource
 ) : DataRepository {
 
+    /**
+     * Fetch data either from remote in case of failure retrive from db.
+     */
     override suspend fun getData(): Items {
         return getFromRemoteData(startDate = getDate(latest = false))
     }
 
+    /**
+     * Get From remote server and save in database.
+     * @param startDate: from date
+     */
     override suspend fun getFromRemoteData(startDate: String): Items {
         val items =
             remoteDataSource.getAllData(startDate = startDate, endDate = getDate(latest = true))
@@ -26,10 +33,23 @@ class DataRepositoryImpl(
         return getAllDataForDisplay()
     }
 
-    override suspend fun getDataByDate(date: String): Item {
-        return localDataSource.getItemByDate(date = date)
+    /**
+     * Get data by date
+     * @param date : Date
+     */
+    override suspend fun getDataByDate(date: String): Item? {
+        remoteDataSource.getItemOnDate(date = date)?.let {
+            localDataSource.saveItemData(it)
+            return it
+        }
+        return localDataSource.getItemByDate(date)
     }
 
+    /**
+     * Update favorite selection in db
+     * @param data : Item
+     * @param isExist: Is already exist
+     */
     override suspend fun updateItem(data: Item, isExist: Boolean): Items {
         if (!isExist) {
             localDataSource.updateItemData(data.toLikedItem())
@@ -39,6 +59,9 @@ class DataRepositoryImpl(
         return getAllDataForDisplay()
     }
 
+    /**
+     * Get list of favorite items list.
+     */
     override suspend fun getFavouriteItems(): List<Item> {
         return localDataSource.getAllLikedData().map { it.toItem() }
     }

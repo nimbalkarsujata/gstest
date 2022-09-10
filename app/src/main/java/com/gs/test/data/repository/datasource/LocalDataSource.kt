@@ -9,6 +9,7 @@ interface LocalDataSource : BaseDataSource<Item> {
     override suspend fun getItemByDate(date: String): Item
     suspend fun updateItemData(date: LikedItem)
     override suspend fun saveAllData(data: List<Item>)
+    override suspend fun saveItemData(data: Item)
     override suspend fun clearAllData()
     override suspend fun deleteData(item: LikedItem)
 }
