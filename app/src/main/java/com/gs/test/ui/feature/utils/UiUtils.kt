@@ -2,14 +2,18 @@ package com.gs.test.ui.feature.utils
 
 import android.app.DatePickerDialog
 import android.content.Context
+import android.os.Build
 import android.widget.DatePicker
 import androidx.annotation.DimenRes
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.sp
 import com.google.gson.Gson
 import com.gs.test.viewmodel.ItemsDataViewModel
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 fun getDate(latest: Boolean): String {
@@ -46,8 +50,7 @@ fun showPicker(context: Context, itemViewModel: ItemsDataViewModel) {
     val day = c.get(Calendar.DAY_OF_MONTH)
 
     val datePickerDialog = DatePickerDialog(
-        context, DatePickerDialog.OnDateSetListener
-        { datePicker: DatePicker, day: Int, month: Int, year: Int ->
+        context, { _: DatePicker, day: Int, month: Int, year: Int ->
             itemViewModel.fetchBasedOnDateSelection(date = "$day-${month + 1}-$year")
         }, year, month, day
     )

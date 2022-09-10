@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -70,7 +71,7 @@ class MainActivity : AppCompatActivity() {
 fun TopBarView(context: Context, itemsDataViewModel: ItemsDataViewModel, navController: NavHostController) {
     TopAppBar(
         title = { Text(stringResource(R.string.gs_top_bar_title, "Welcome")) },
-
+        backgroundColor = colorResource(id = R.color.teal_200),
         actions = {
             IconButton(onClick = {
                 navController.navigate("${Router.FavListScreen.route}")

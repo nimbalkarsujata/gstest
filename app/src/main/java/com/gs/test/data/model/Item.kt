@@ -6,9 +6,11 @@ import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "item")
 data class Item(
+
     @SerializedName("explanation")
     val overview: String,
 
+    @PrimaryKey
     @SerializedName("date")
     val date: String,
 
@@ -18,7 +20,6 @@ data class Item(
     @SerializedName("media_type")
     val media_type: String,
 
-    @PrimaryKey()
     @SerializedName("title")
     val title: String
 )

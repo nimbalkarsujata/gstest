@@ -6,7 +6,7 @@ import com.gs.test.data.model.Item
 @Dao
 interface ItemsDao {
 
-    @Query("Select * from item")
+    @Query("Select * from item ORDER BY date(date) DESC")
     suspend fun getAll(): List<Item>
 
     @Query("Select * from item where date = :date")

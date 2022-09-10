@@ -7,7 +7,7 @@ import com.gs.test.data.model.LikedItem
 @Dao
 interface LikedItemsDao {
 
-    @Query("Select * from liked_items")
+    @Query("Select * from liked_items ORDER BY date(date) DESC")
     suspend fun getAll(): List<LikedItem>
 
 

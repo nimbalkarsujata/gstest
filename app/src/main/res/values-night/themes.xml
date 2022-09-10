@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.GSTest" parent="android:Theme.Black.NoTitleBar">
-        <item name="android:statusBarColor">@color/purple_700</item>
+    <style name="Theme.GSTest" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@color/purple_200</item>
     </style>
 </resources>

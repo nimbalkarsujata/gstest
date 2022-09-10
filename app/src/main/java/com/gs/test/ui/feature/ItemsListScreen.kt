@@ -1,6 +1,7 @@
 package com.gs.test.ui.feature
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.clickable
@@ -20,6 +21,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.lifecycle.LiveData
@@ -85,7 +87,7 @@ fun ListData(itemViewModel: ItemsDataViewModel, itemList: List<Item>, navCallBac
             }
             item {
                 LaunchedEffect(true) {
-                    // check scroll till end
+                    Log.d("Sujata","Sujata at end ---->")
                 }
             }
         }
@@ -163,6 +165,7 @@ fun DataItem(item: Item, navCallBack: (Item) -> Unit, itemViewModel: ItemsDataVi
                     Icons.Filled.Favorite
                 else
                     Icons.Default.FavoriteBorder,
+                tint = colorResource(id = R.color.teal_200),
                 contentDescription = "Icon Favorite",
                 modifier = Modifier
                     .align(CenterVertically)
