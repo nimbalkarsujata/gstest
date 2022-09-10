@@ -5,8 +5,9 @@ import com.gs.test.data.model.Items
 
 
 interface DataRepository {
-    suspend fun getFromLocalSavedData(): List<Item>
     suspend fun getData(): Items
-    suspend fun getFromRemoteData(): List<Item>
-    suspend fun getSingleItemDetails(id: Int): Item?
+    suspend fun getFromRemoteData(date: String): Items
+    suspend fun getDataByDate(date: String): Item?
+    suspend fun updateItem(data: Item, isExist: Boolean): Items
+    suspend fun getFavouriteItems(): List<Item>
 }

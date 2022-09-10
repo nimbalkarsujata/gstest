@@ -8,7 +8,6 @@ package com.gs.test.ui.feature.utils
 sealed class UiState<out T>() {
     object Hidden : UiState<Nothing>()
     object Loading : UiState<Nothing>()
-    class LoadingData(val data: Any? = null) : UiState<Nothing>()
     class Error(val throwable: Throwable? = null, val data: Any? = null) : UiState<Nothing>()
     class Success<T>(val data: T? = null) : UiState<T>()
 }

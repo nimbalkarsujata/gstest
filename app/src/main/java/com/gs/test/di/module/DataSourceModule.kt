@@ -3,6 +3,7 @@ package com.gs.test.di.module
 import com.gs.test.BuildConfig
 import com.gs.test.data.api.ApiService
 import com.gs.test.data.database.ItemsDao
+import com.gs.test.data.database.LikedItemsDao
 import com.gs.test.data.repository.datasource.LocalDataSource
 import com.gs.test.data.repository.datasource.LocalDataSourceImpl
 import com.gs.test.data.repository.datasource.RemoteDataSource
@@ -14,8 +15,8 @@ import dagger.Provides
 class DataSourceModule {
 
     @Provides
-    fun provideLocalDataSource(datasDao: ItemsDao): LocalDataSource {
-        return LocalDataSourceImpl(dataDao = datasDao)
+    fun provideLocalDataSource(datasDao: ItemsDao, likedItemsDao: LikedItemsDao): LocalDataSource {
+        return LocalDataSourceImpl(dataDao = datasDao, likedItemsDao = likedItemsDao)
     }
 
     @Provides

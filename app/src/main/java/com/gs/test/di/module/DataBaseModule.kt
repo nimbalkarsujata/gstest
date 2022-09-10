@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.gs.test.data.database.AppDatabase
 import com.gs.test.data.database.ItemsDao
+import com.gs.test.data.database.LikedItemsDao
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -21,5 +22,11 @@ class DataBaseModule {
     @Provides
     fun providesItemDao(database: AppDatabase): ItemsDao {
         return database.dataDao()
+    }
+
+    @Singleton
+    @Provides
+    fun providesLikedItemDao(database: AppDatabase): LikedItemsDao {
+        return database.dataFavDao()
     }
 }

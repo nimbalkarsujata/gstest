@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">GS Test</string>
+    <string name="gs_top_bar_title">Welcome</string>
+
 </resources>

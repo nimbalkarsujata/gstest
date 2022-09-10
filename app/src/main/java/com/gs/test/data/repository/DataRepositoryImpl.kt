@@ -1,59 +1,48 @@
 package com.gs.test.data.repository
 
-import android.util.Log
-import com.gs.test.data.model.Item
-import com.gs.test.data.model.Items
+import com.gs.test.data.model.*
 import com.gs.test.data.repository.datasource.LocalDataSource
 import com.gs.test.data.repository.datasource.RemoteDataSource
-import java.util.ArrayList
+import com.gs.test.ui.feature.utils.getDate
 
 class DataRepositoryImpl(
     private val localDataSource: LocalDataSource,
     private val remoteDataSource: RemoteDataSource
 ) : DataRepository {
-    override suspend fun getFromLocalSavedData(): List<Item> {
-        lateinit var dataList: List<Item>
-        try {
-            dataList = localDataSource.getAllData()
-            Log.d("Test", "Local data receive from database $dataList")
-            if (dataList.isEmpty()) {
-                dataList = remoteDataSource.getAllData().results
-            }
-        } catch (exception: Exception) {
-            dataList = ArrayList()
-            Log.i("Test", "Exception of fetch" + exception.message.toString())
-        }
-        return dataList
-    }
-
-    suspend fun getFromDb(): Items {
-        localDataSource.getAllData().let {
-            return Items(it)
-        }
-    }
 
     override suspend fun getData(): Items {
-        return remoteDataSource.getAllData()
+        return getFromRemoteData(startDate = getDate(latest = false))
     }
 
-    override suspend fun getFromRemoteData(): List<Item> {
-        var itemsList: List<Item> = ArrayList<Item>()
-        val items = remoteDataSource.getAllData()
+    override suspend fun getFromRemoteData(startDate: String): Items {
+        val items = remoteDataSource.getAllData(startDate = startDate, endDate = getDate(latest = true))
         items.let {
-            itemsList = items.results
-            if (itemsList.isNotEmpty()) {
+            if (items.results.isNullOrEmpty().not()) {
                 localDataSource.clearAllData()
-                localDataSource.saveAllData(itemsList)
+                localDataSource.saveAllData(items.results)
             }
         }
-        return itemsList
+        return getAllDataForDisplay()
     }
 
-    override suspend fun getSingleItemDetails(id: Int): Item? {
-        val item = remoteDataSource.getData(id)
-        if (item.body() != null) {
-            return item.body()!!
+    override suspend fun getDataByDate(date: String): Item? {
+        return localDataSource.getItemByDate(date = date)
+    }
+
+    override suspend fun updateItem(data: Item, isExist: Boolean): Items {
+        if (!isExist) {
+            localDataSource.updateItemData(data.toLikedItem())
+        } else {
+            localDataSource.deleteData(data.toLikedItem())
         }
-        return null
+        return getAllDataForDisplay()
+    }
+
+    override suspend fun getFavouriteItems(): List<Item> {
+        return localDataSource.getAllLikedData().map { it.toItem() }
+    }
+
+    private suspend fun getAllDataForDisplay(): Items {
+        return Items(localDataSource.getAllData())
     }
 }
