@@ -14,16 +14,16 @@ class DataRepositoryImpl(
      * Fetch data either from remote in case of failure retrive from db.
      */
     override suspend fun getData(): Items {
-        return getFromRemoteData(startDate = getDate(latest = false))
+        return getFromRemoteData(date = getDate(latest = false))
     }
 
     /**
      * Get From remote server and save in database.
-     * @param startDate: from date
+     * @param date: from date
      */
-    override suspend fun getFromRemoteData(startDate: String): Items {
+    override suspend fun getFromRemoteData(date: String): Items {
         val items =
-            remoteDataSource.getAllData(startDate = startDate, endDate = getDate(latest = true))
+            remoteDataSource.getAllData(startDate = date, endDate = getDate(latest = true))
         items.let {
             if (items.results.isNullOrEmpty().not()) {
                 localDataSource.clearAllData()
@@ -39,11 +39,13 @@ class DataRepositoryImpl(
      */
     override suspend fun getDataByDate(date: String): Item? {
         remoteDataSource.getItemOnDate(date = date)?.let {
-            localDataSource.clearAllData()
-            localDataSource.saveItemData(it)
+            if (date.isEmpty()) {
+                localDataSource.clearAllData()
+                localDataSource.saveItemData(it)
+            }
             return it
         }
-        return if (!localDataSource.getAllData().isNullOrEmpty()) {
+        return if (!localDataSource.getAllData().isNullOrEmpty() && date.isEmpty()) {
             localDataSource.getAllData()[0]
         } else
             null
